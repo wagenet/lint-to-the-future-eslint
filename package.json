@@ -9,13 +9,16 @@
   },
   "dependencies": {
     "esm": "^3.2.25",
-    "lodash": "^4.13.1"
+    "import-cwd": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.8.0",
     "mocha": "^6.1.4"
+  },
+  "peerDependencies": {
+    "eslint": "^6.0.0 || ^7.0.0"
   },
   "engines": {
     "node": "10.* || >= 12.*"
