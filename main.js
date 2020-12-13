@@ -10,7 +10,11 @@ function ignoreError(error) {
   const firstLine = file.split('\n')[0];
 
   if (firstLine.includes('eslint-disable')) {
-    console.warn('appending existing disables not supported yet');
+    const matched = firstLine.match(/eslint-disable(.*)\*\//);
+    const existing = matched[1].split(',').map(item => item.trim());
+    uniqueIds = [...new Set([...ruleIds, ...existing])];
+
+    writeFileSync(error.filePath, file.replace(/^.*\n/, `/* eslint-disable ${uniqueIds.join(', ')} */\n`));
   } else {
     writeFileSync(error.filePath, `/* eslint-disable ${uniqueIds.join(', ')} */\n${file}`);
   }
