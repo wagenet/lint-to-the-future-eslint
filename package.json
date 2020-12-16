@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "esm": "^3.2.25",
-    "import-cwd": "^3.0.0"
+    "import-cwd": "^3.0.0",
+    "walk-sync": "^2.2.0"
   },
   "devDependencies": {
     "eslint": "^5.9.0",

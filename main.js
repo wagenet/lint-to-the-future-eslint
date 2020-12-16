@@ -1,5 +1,7 @@
 const { readFileSync, writeFileSync } = require('fs');
+const { join } = require('path');
 const importCwd = require('import-cwd');
+const walkSync = require('walk-sync');
 
 function ignoreError(error) {
   const ruleIds = error.messages.map(message => message.ruleId);
@@ -35,5 +37,44 @@ export function ignoreAll() {
 }
 
 export function list() {
-  throw new Error('listing not supported yet in this plugin');
+  let ignoreFile;
+
+  try {
+    ignoreFile = readFileSync(join(process.cwd(), '.gitignore'), 'utf8')
+      .split('\n')
+      .filter(line => line.length)
+      .filter(line => !line.startsWith('#'))
+      .map(line => line.replace(/^\//, ''))
+      .map(line => line.replace(/\/$/, '/*'));
+  } catch (e) {
+    // noop
+  }
+
+  const files = walkSync(process.cwd(), {
+    globs: ['**/*.js'],
+    ignore: ignoreFile || ['node_modules/*'],
+  });
+
+  const output = {};
+
+  files.forEach((filePath) => {
+    const file = readFileSync(filePath, 'utf8');
+    const firstLine = file.split('\n')[0];
+    if (!firstLine.includes('eslint-disable')) {
+      return;
+    }
+
+    const matched = firstLine.match(/eslint-disable(.*)\*\//);
+    const ignoreRules = matched[1].split(',').map(item => item.trim());
+
+    ignoreRules.forEach((rule) => {
+      if (output[rule]) {
+        output[rule].push(filePath);
+      } else {
+        output[rule] = [filePath];
+      }
+    });
+  });
+
+  return output;
 }
