@@ -60,11 +60,11 @@ export function list() {
   files.forEach((filePath) => {
     const file = readFileSync(filePath, 'utf8');
     const firstLine = file.split('\n')[0];
-    if (!firstLine.includes('eslint-disable')) {
+    if (!firstLine.includes('eslint-disable ')) {
       return;
     }
 
-    const matched = firstLine.match(/eslint-disable(.*)\*\//);
+    const matched = firstLine.match(/eslint-disable (.*)\*\//);
     const ignoreRules = matched[1].split(',').map(item => item.trim());
 
     ignoreRules.forEach((rule) => {
