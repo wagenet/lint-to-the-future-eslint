@@ -1,4 +1,4 @@
-const { readFileSync, writeFileSync } = require('fs');
+const { readFileSync, writeFileSync, lstatSync } = require('fs');
 const { join } = require('path');
 const importCwd = require('import-cwd');
 const walkSync = require('walk-sync');
@@ -58,6 +58,11 @@ export function list() {
   const output = {};
 
   files.forEach((filePath) => {
+    // prevent odd times when directories might end with `.js`;
+    if (!lstatSync(filePath).isFile()) {
+      return;
+    }
+
     const file = readFileSync(filePath, 'utf8');
     const firstLine = file.split('\n')[0];
     if (!firstLine.includes('eslint-disable ')) {
