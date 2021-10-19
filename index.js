@@ -2,6 +2,7 @@ const { readFileSync, writeFileSync, lstatSync } = require('fs');
 const { join } = require('path');
 const importCwd = require('import-cwd');
 const walkSync = require('walk-sync');
+const semver = require('semver');
 
 function ignoreError(error) {
   const ruleIds = error.messages.map(message => message.ruleId);
@@ -22,14 +23,30 @@ function ignoreError(error) {
   }
 }
 
-function ignoreAll() {
+async function ignoreAll() {
+  // eslint-disable-next-line global-require, import/no-dynamic-require
+  const currentPackageJSON = require(join(process.cwd(), 'package.json'));
+
+  const eslintVersion = currentPackageJSON.devDependencies.eslint;
+
+  let cli;
+  let report;
+  let results;
+
   const eslint = importCwd('eslint');
 
-  const { CLIEngine } = eslint;
-
-  const cli = new CLIEngine();
-
-  const report = cli.executeOnFiles(['.']);
+  if (semver.gte(eslintVersion, '8.0.0') || false) {
+    // this won't use the version in the repo but it will still use v8 because
+    // that is installed in this repo
+    const { ESLint } = eslint;
+    cli = new ESLint();
+    results = await cli.lintFiles(['.']);
+  } else {
+    const { CLIEngine } = eslint;
+    cli = new CLIEngine();
+    report = cli.executeOnFiles(['.']);
+    results = report.results;
+  }
 
   const errors = report.results.filter(result => result.errorCount > 0);
 

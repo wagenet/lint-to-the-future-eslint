@@ -10,7 +10,8 @@
   "dependencies": {
     "esm": "^3.2.25",
     "import-cwd": "^3.0.0",
-    "walk-sync": "^2.2.0"
+    "semver": "^7.3.5",
+    "walk-sync": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "^5.9.0",
@@ -19,7 +20,7 @@
     "mocha": "^6.1.4"
   },
   "peerDependencies": {
-    "eslint": "^6.0.0 || ^7.0.0"
+    "eslint": "^6.0.0 || ^7.0.0 || ^8.0.0"
   },
   "engines": {
     "node": "10.* || >= 12.*"
