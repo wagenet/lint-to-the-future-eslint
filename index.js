@@ -5,7 +5,7 @@ const walkSync = require('walk-sync');
 const semver = require('semver');
 
 function ignoreError(error) {
-  const ruleIds = error.messages.map(message => message.ruleId);
+  const ruleIds = error.messages.map((message) => message.ruleId);
   let uniqueIds = [...new Set(ruleIds)];
 
   const file = readFileSync(error.filePath, 'utf8');
@@ -14,7 +14,7 @@ function ignoreError(error) {
 
   if (firstLine.includes('eslint-disable')) {
     const matched = firstLine.match(/eslint-disable(.*)\*\//);
-    const existing = matched[1].split(',').map(item => item.trim());
+    const existing = matched[1].split(',').map((item) => item.trim());
     uniqueIds = [...new Set([...ruleIds, ...existing])];
 
     writeFileSync(error.filePath, file.replace(/^.*\n/, `/* eslint-disable ${uniqueIds.join(', ')} */\n`));
@@ -48,7 +48,7 @@ async function ignoreAll() {
     results = report.results;
   }
 
-  const errors = report.results.filter(result => result.errorCount > 0);
+  const errors = results.filter((result) => result.errorCount > 0);
 
   errors.forEach(ignoreError);
 }
@@ -59,10 +59,10 @@ function list() {
   try {
     ignoreFile = readFileSync(join(process.cwd(), '.gitignore'), 'utf8')
       .split('\n')
-      .filter(line => line.length)
-      .filter(line => !line.startsWith('#'))
-      .map(line => line.replace(/^\//, ''))
-      .map(line => line.replace(/\/$/, '/*'));
+      .filter((line) => line.length)
+      .filter((line) => !line.startsWith('#'))
+      .map((line) => line.replace(/^\//, ''))
+      .map((line) => line.replace(/\/$/, '/*'));
   } catch (e) {
     // noop
   }
@@ -87,7 +87,7 @@ function list() {
     }
 
     const matched = firstLine.match(/eslint-disable (.*)\*\//);
-    const ignoreRules = matched[1].split(',').map(item => item.trim());
+    const ignoreRules = matched[1].split(',').map((item) => item.trim());
 
     ignoreRules.forEach((rule) => {
       if (output[rule]) {
