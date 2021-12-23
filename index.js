@@ -35,7 +35,7 @@ async function ignoreAll(cwd = process.cwd()) {
 
   const eslint = importCwd('eslint');
 
-  if (semver.gte(eslintVersion, '8.0.0') || false) {
+  if (semver.intersects(eslintVersion, '8')) {
     // this won't use the version in the repo but it will still use v8 because
     // that is installed in this repo
     const { ESLint } = eslint;
