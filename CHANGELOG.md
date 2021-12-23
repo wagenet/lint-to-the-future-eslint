@@ -1,3 +1,7 @@
+v0.3.1 / 2021-12-23
+==================
+* Fix issue with caret dependency of eslint and add a test to verify ignore works #3 from @mansona
+
 v0.3.0 / 2021-10-19
 ==================
 * add automatic release system #2 from @mansona
