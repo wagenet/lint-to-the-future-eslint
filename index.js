@@ -23,9 +23,9 @@ function ignoreError(error) {
   }
 }
 
-async function ignoreAll() {
+async function ignoreAll(cwd = process.cwd()) {
   // eslint-disable-next-line global-require, import/no-dynamic-require
-  const currentPackageJSON = require(join(process.cwd(), 'package.json'));
+  const currentPackageJSON = require(join(cwd, 'package.json'));
 
   const eslintVersion = currentPackageJSON.devDependencies.eslint;
 
@@ -35,16 +35,16 @@ async function ignoreAll() {
 
   const eslint = importCwd('eslint');
 
-  if (semver.gte(eslintVersion, '8.0.0') || false) {
+  if (semver.intersects(eslintVersion, '8')) {
     // this won't use the version in the repo but it will still use v8 because
     // that is installed in this repo
     const { ESLint } = eslint;
     cli = new ESLint();
-    results = await cli.lintFiles(['.']);
+    results = await cli.lintFiles([cwd]);
   } else {
     const { CLIEngine } = eslint;
     cli = new CLIEngine();
-    report = cli.executeOnFiles(['.']);
+    report = cli.executeOnFiles([cwd]);
     results = report.results;
   }
 
@@ -53,11 +53,11 @@ async function ignoreAll() {
   errors.forEach(ignoreError);
 }
 
-function list() {
+function list(cwd = process.cwd()) {
   let ignoreFile;
 
   try {
-    ignoreFile = readFileSync(join(process.cwd(), '.gitignore'), 'utf8')
+    ignoreFile = readFileSync(join(cwd, '.gitignore'), 'utf8')
       .split('\n')
       .filter((line) => line.length)
       .filter((line) => !line.startsWith('#'))
@@ -67,7 +67,7 @@ function list() {
     // noop
   }
 
-  const files = walkSync(process.cwd(), {
+  const files = walkSync(cwd, {
     globs: ['**/*.js'],
     ignore: ignoreFile || ['node_modules/*'],
   });
