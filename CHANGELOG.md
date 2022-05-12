@@ -1,3 +1,7 @@
+v0.4.0 / 2022-05-12
+==================
+* Make sure `.ts` files are also processed in list command #5 from @jamescdavis
+
 v0.3.1 / 2021-12-23
 ==================
 * Fix issue with caret dependency of eslint and add a test to verify ignore works #3 from @mansona
