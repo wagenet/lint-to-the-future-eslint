@@ -68,14 +68,14 @@ function list(cwd = process.cwd()) {
   }
 
   const files = walkSync(cwd, {
-    globs: ['**/*.js'],
+    globs: ['**/*.js', '**/*.ts'],
     ignore: ignoreFile || ['node_modules/*'],
   });
 
   const output = {};
 
   files.forEach((filePath) => {
-    // prevent odd times when directories might end with `.js`;
+    // prevent odd times when directories might end with `.js` or `.ts`;
     if (!lstatSync(filePath).isFile()) {
       return;
     }
