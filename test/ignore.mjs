@@ -140,4 +140,31 @@ console.log('test')`,
 debugger
 console.log('test')`);
   });
+
+  it('handles rules with slashes in the name', async function () {
+    this.timeout(20000);
+    const tempDir = await temp.mkdir('super-app');
+
+    fixturify.writeSync(tempDir, {
+      '.eslintrc.json': '{"extends": "eslint:recommended"}',
+      'test.js': `/* eslint-disable ember/no-observers */
+debugger`,
+      'package.json': `{
+  "devDependencies": {
+    "eslint": "^8.0.0"
+  }
+}
+`,
+    });
+
+    let result = await execa('npm', ['i'], { cwd: tempDir });
+
+    await ignoreAll(tempDir);
+
+    result = fixturify.readSync(tempDir);
+
+    expect(result['test.js']).to
+      .equal(`/* eslint-disable ember/no-observers, no-debugger */
+debugger`);
+  });
 });
