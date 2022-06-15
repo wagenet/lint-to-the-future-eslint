@@ -6,7 +6,7 @@ import fixturify from 'fixturify';
 // eslint-disable-next-line import/extensions
 import { ignoreAll } from '../index.js';
 
-describe.only('ignore function', function () {
+describe('ignore function', function () {
   it('should not crash with ^ in eslint dependency', async function () {
     this.timeout(20000);
     const tempDir = await temp.mkdir('super-app');
