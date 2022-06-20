@@ -57,7 +57,7 @@ debugger`);
 debugger`);
   });
 
-  it('should handle files with `// eslint-disable` comments', async function () {
+  it('should handle files with invalid `// eslint-disable` comments at the top', async function () {
     this.timeout(20000);
     const tempDir = await temp.mkdir('super-app');
 
@@ -80,6 +80,7 @@ debugger`,
     result = fixturify.readSync(tempDir);
 
     expect(result['test.js']).to.equal(`/* eslint-disable no-debugger */
+// eslint-disable no-debugger
 debugger`);
   });
 
