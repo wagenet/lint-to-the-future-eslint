@@ -74,7 +74,8 @@ function list(cwd = process.cwd()) {
 
   const output = {};
 
-  files.forEach((filePath) => {
+  files.forEach((relativeFilePath) => {
+    const filePath = join(cwd, relativeFilePath);
     // prevent odd times when directories might end with `.js` or `.ts`;
     if (!lstatSync(filePath).isFile()) {
       return;
