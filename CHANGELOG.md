@@ -1,3 +1,12 @@
+v1.0.0 / 2022-06-21
+==================
+This is not a major release, it just marks a point where the plugin is considered stable enough
+to be v1.0 🎉
+
+* Make regular expression resilient to // eslint-disable-next-line declarations #6 from @locks
+* fix typo in README.md #8 from @locks
+* add a test for list function #7 from @mansona
+
 v0.4.0 / 2022-05-12
 ==================
 * Make sure `.ts` files are also processed in list command #5 from @jamescdavis
