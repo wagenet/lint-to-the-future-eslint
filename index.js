@@ -12,8 +12,11 @@ function ignoreError(error) {
 
   const firstLine = file.split('\n')[0];
 
-  if (firstLine.includes('eslint-disable')) {
-    const matched = firstLine.match(/eslint-disable(.*)\*\//);
+  // The whitespace after `eslint-disable` is important so `eslint-disable-next-line` and variants
+  // aren't picked up.
+  const matched = firstLine.match(/eslint-disable (.*)\*\//);
+
+  if (matched) {
     const existing = matched[1].split(',').map((item) => item.trim());
     uniqueIds = [...new Set([...ruleIds, ...existing])];
 
