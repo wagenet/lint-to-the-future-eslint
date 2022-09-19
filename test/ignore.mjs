@@ -1,14 +1,32 @@
-import { execa } from 'execa';
 import { expect } from 'chai';
 import temp from 'temp';
 import fixturify from 'fixturify';
+import { execa } from 'execa';
+import { resolve } from 'import-meta-resolve';
+import { dirname } from 'path';
+import { readFileSync } from 'fs';
+import { pkgUp } from 'pkg-up';
 
 // eslint-disable-next-line import/extensions
 import { ignoreAll } from '../index.js';
 
+// this really shouldn't be so hard 🙈
+async function getEslintVersion() {
+  let eslintPath = await resolve('eslint', import.meta.url);
+  eslintPath = eslintPath.replace(/^file:\/\//, '');
+  const eslintPackage = await pkgUp({
+    cwd: dirname(eslintPath),
+  });
+  const eslintPackageObj = JSON.parse(readFileSync(eslintPackage));
+  return eslintPackageObj.version;
+}
+
+const eslintVersion = await getEslintVersion();
+
 describe('ignore function', function () {
+  this.timeout(20000);
+
   it('should not crash with ^ in eslint dependency', async function () {
-    this.timeout(20000);
     const tempDir = await temp.mkdir('super-app');
 
     fixturify.writeSync(tempDir, {
@@ -16,7 +34,7 @@ describe('ignore function', function () {
       'test.js': 'debugger',
       'package.json': `{
   "devDependencies": {
-    "eslint": "^7.17.0"
+    "eslint": "^${eslintVersion}"
   }
 }
 `,
@@ -32,8 +50,7 @@ describe('ignore function', function () {
 debugger`);
   });
 
-  it('should work with eslint 8', async function () {
-    this.timeout(20000);
+  it(`should work with eslint ${eslintVersion}`, async function () {
     const tempDir = await temp.mkdir('super-app');
 
     fixturify.writeSync(tempDir, {
@@ -41,7 +58,7 @@ debugger`);
       'test.js': 'debugger',
       'package.json': `{
   "devDependencies": {
-    "eslint": "^8.0.0"
+    "eslint": "${eslintVersion}"
   }
 }
 `,
@@ -67,7 +84,7 @@ debugger`);
 debugger`,
       'package.json': `{
   "devDependencies": {
-    "eslint": "^8.0.0"
+    "eslint": "${eslintVersion}"
   }
 }
 `,
@@ -85,7 +102,6 @@ debugger`);
   });
 
   it('should add to existing `/* eslint-disable` comments', async function () {
-    this.timeout(20000);
     const tempDir = await temp.mkdir('super-app');
 
     fixturify.writeSync(tempDir, {
@@ -95,7 +111,7 @@ debugger
 console.log('test')`,
       'package.json': `{
   "devDependencies": {
-    "eslint": "^8.0.0"
+    "eslint": "${eslintVersion}"
   }
 }
 `,
@@ -114,7 +130,6 @@ console.log('test')`);
   });
 
   it('handles `// eslint-disable-next-line` at the top of the file correctly', async function () {
-    this.timeout(20000);
     const tempDir = await temp.mkdir('super-app');
 
     fixturify.writeSync(tempDir, {
@@ -124,7 +139,7 @@ debugger
 console.log('test')`,
       'package.json': `{
   "devDependencies": {
-    "eslint": "^8.0.0"
+    "eslint": "${eslintVersion}"
   }
 }
 `,
@@ -143,7 +158,6 @@ console.log('test')`);
   });
 
   it('handles rules with slashes in the name', async function () {
-    this.timeout(20000);
     const tempDir = await temp.mkdir('super-app');
 
     fixturify.writeSync(tempDir, {
@@ -152,7 +166,7 @@ console.log('test')`);
 debugger`,
       'package.json': `{
   "devDependencies": {
-    "eslint": "^8.0.0"
+    "eslint": "${eslintVersion}"
   }
 }
 `,
