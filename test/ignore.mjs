@@ -7,8 +7,9 @@ import fixturify from 'fixturify';
 import { ignoreAll } from '../index.js';
 
 describe('ignore function', function () {
-  it('should not crash with ^ in eslint dependency', async function () {
     this.timeout(20000);
+
+  it('should not crash with ^ in eslint dependency', async function () {
     const tempDir = await temp.mkdir('super-app');
 
     fixturify.writeSync(tempDir, {
@@ -33,7 +34,6 @@ debugger`);
   });
 
   it('should work with eslint 8', async function () {
-    this.timeout(20000);
     const tempDir = await temp.mkdir('super-app');
 
     fixturify.writeSync(tempDir, {
@@ -85,7 +85,6 @@ debugger`);
   });
 
   it('should add to existing `/* eslint-disable` comments', async function () {
-    this.timeout(20000);
     const tempDir = await temp.mkdir('super-app');
 
     fixturify.writeSync(tempDir, {
@@ -114,7 +113,6 @@ console.log('test')`);
   });
 
   it('handles `// eslint-disable-next-line` at the top of the file correctly', async function () {
-    this.timeout(20000);
     const tempDir = await temp.mkdir('super-app');
 
     fixturify.writeSync(tempDir, {
@@ -143,7 +141,6 @@ console.log('test')`);
   });
 
   it('handles rules with slashes in the name', async function () {
-    this.timeout(20000);
     const tempDir = await temp.mkdir('super-app');
 
     fixturify.writeSync(tempDir, {
