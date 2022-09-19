@@ -20,6 +20,7 @@ jobs:
     - run: npm run lint
 
   test:
+    name: "test with eslint ${{ matrix.eslint-version}} on node v${{ matrix.node-version }}"
     runs-on: ubuntu-latest
 
     strategy:
@@ -29,7 +30,6 @@ jobs:
           - 7
           - 8
         node-version:
-          - 12
           - 14
           - 16
           - 18
