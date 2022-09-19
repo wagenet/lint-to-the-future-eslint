@@ -182,4 +182,37 @@ debugger`,
       .equal(`/* eslint-disable ember/no-observers, no-debugger */
 debugger`);
   });
+
+  it('does not add ignores for warnings reported by eslint', async function () {
+    const tempDir = await temp.mkdir('super-app');
+
+    fixturify.writeSync(tempDir, {
+      '.eslintrc.json': '{"extends": "eslint:recommended", "rules": { "no-constant-condition": "warn" }}',
+      'test.js': `debugger
+
+if (10 === 'false') {
+  // something
+}`,
+      'package.json': `{
+  "devDependencies": {
+    "eslint": "${eslintVersion}"
+  }
+}
+`,
+    });
+
+    let result = await execa('npm', ['i'], { cwd: tempDir });
+
+    await ignoreAll(tempDir);
+
+    result = fixturify.readSync(tempDir);
+
+    expect(result['test.js']).to
+      .equal(`/* eslint-disable no-debugger */
+debugger
+
+if (10 === 'false') {
+  // something
+}`);
+  });
 });
