@@ -1,3 +1,8 @@
+v1.0.1 / 2022-09-19
+==================
+* stop ignoring eslint warnings #11 from @mansona
+* Add eslint versions to a test matrix #10 from @mansona
+
 v1.0.0 / 2022-06-21
 ==================
 This is not a major release, it just marks a point where the plugin is considered stable enough
