@@ -13,7 +13,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
-        node-version: 12
+        node-version: 16
         cache: npm
     - run: npm i -g npm@8
     - run: npm ci
@@ -22,12 +22,25 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        eslint-version:
+          - 7
+          - 8
+        node-version:
+          - 12
+          - 14
+          - 16
+          - 18
+
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
-        node-version: 12
+        node-version: ${{ matrix.node-version }}
         cache: npm
     - run: npm i -g npm@8
     - run: npm ci
+    - run: npm i eslint@${{ matrix.eslint-version }}
     - run: npm test
