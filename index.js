@@ -44,11 +44,17 @@ async function ignoreAll(cwd = process.cwd()) {
     const { ESLint } = eslint;
     cli = new ESLint();
     results = await cli.lintFiles([cwd]);
+
+    // remove warnings
+    results = ESLint.getErrorResults(results);
   } else {
-    const { CLIEngine } = eslint;
+    const { CLIEngine, ESLint } = eslint;
     cli = new CLIEngine();
     report = cli.executeOnFiles([cwd]);
     results = report.results;
+
+    // remove warnings
+    results = ESLint.getErrorResults(results);
   }
 
   const errors = results.filter((result) => result.errorCount > 0);
