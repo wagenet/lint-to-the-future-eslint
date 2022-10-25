@@ -124,7 +124,7 @@ console.log('test')`,
     result = fixturify.readSync(tempDir);
 
     expect(result['test.js']).to
-      .equal(`/* eslint-disable no-debugger, no-console, no-undef */
+      .equal(`/* eslint-disable no-console, no-debugger, no-undef */
 debugger
 console.log('test')`);
   });

@@ -19,9 +19,11 @@ function ignoreError(error) {
   if (matched) {
     const existing = matched[1].split(',').map((item) => item.trim());
     uniqueIds = [...new Set([...ruleIds, ...existing])];
+    uniqueIds.sort((a, b) => a.localeCompare(b));
 
     writeFileSync(error.filePath, file.replace(/^.*\n/, `/* eslint-disable ${uniqueIds.join(', ')} */\n`));
   } else {
+    uniqueIds.sort((a, b) => a.localeCompare(b));
     writeFileSync(error.filePath, `/* eslint-disable ${uniqueIds.join(', ')} */\n${file}`);
   }
 }
