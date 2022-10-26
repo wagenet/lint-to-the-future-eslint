@@ -21,8 +21,9 @@ function ignoreError(error) {
     uniqueIds = [...new Set([...ruleIds, ...existing])];
     uniqueIds.sort((a, b) => a.localeCompare(b));
 
-    writeFileSync(error.filePath, file.replace(/^.*\n/, `/* eslint-disable ${uniqueIds.join(', ')} */\n`));
-  } else {
+    const replacement = uniqueIds.length ? `/* eslint-disable ${uniqueIds.join(', ')} */\n` : '';
+    writeFileSync(error.filePath, file.replace(/^.*\n/, replacement));
+  } else if (uniqueIds.length) {
     uniqueIds.sort((a, b) => a.localeCompare(b));
     writeFileSync(error.filePath, `/* eslint-disable ${uniqueIds.join(', ')} */\n${file}`);
   }
