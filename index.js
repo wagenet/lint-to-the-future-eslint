@@ -106,9 +106,9 @@ function list(cwd = process.cwd()) {
 
     ignoreRules.forEach((rule) => {
       if (output[rule]) {
-        output[rule].push(filePath);
+        output[rule].push(relativeFilePath);
       } else {
-        output[rule] = [filePath];
+        output[rule] = [relativeFilePath];
       }
     });
   });
